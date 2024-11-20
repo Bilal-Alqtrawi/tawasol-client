@@ -1,4 +1,4 @@
-  import { HashRouter as Router, Routes, Route } from "react-router-dom";
+  import { BrowserRouter, Routes, Route } from "react-router-dom";
   import { Fragment, useEffect } from "react";
   import "./App.css";
   import Landing from "./componets/Landing";
@@ -42,7 +42,7 @@
     // <Provider store={store}> لازم يحيط بالروت كومبومنت
     return (
       <Provider store={store}>
-        <Router>
+        <BrowserRouter>
           <AlertProvider template={AlertTemplate} {...options}>
             <Fragment>
               <Alert />
@@ -104,7 +104,7 @@
               </Routes>
             </Fragment>
           </AlertProvider>
-        </Router>
+        </BrowserRouter>
       </Provider>
     );
   }
