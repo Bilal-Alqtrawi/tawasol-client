@@ -1,6 +1,7 @@
 import axios from "axios"; // library from it call APIs
 
-export const serverUrl = "https://tawasol-server-us0g.onrender.com/";
+// export const serverUrl = "http://localhost:5000";
+export const serverUrl = "https://tawasol-server-us0g.onrender.com";
 
 // helper function
 // axios.create // create Api
