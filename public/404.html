@@ -1,21 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Page Not Found</title>
-    <meta
-      http-equiv="refresh"
-      content="0; URL='https://Bilal-Alqtrawi.github.io/tawasol-client/'"
-    />
+    <meta charset="utf-8" />
+    <title>TawaSol</title>
+    <script type="text/javascript">
+      var pathSegmentsToKeep = 1;
+
+      var l = window.location;
+      l.replace(
+        l.protocol +
+          "//" +
+          l.hostname +
+          (l.port ? ":" + l.port : "") +
+          l.pathname
+            .split("/")
+            .slice(0, 1 + pathSegmentsToKeep)
+            .join("/") +
+          "/?/" +
+          l.pathname
+            .slice(1)
+            .split("/")
+            .slice(pathSegmentsToKeep)
+            .join("/")
+            .replace(/&/g, "~and~") +
+          (l.search ? "&" + l.search.slice(1).replace(/&/g, "~and~") : "") +
+          l.hash
+      );
+    </script>
   </head>
-  <body>
-    <p>Redirecting...</p>
-    <!-- <script>
-      var redirectTo = window.location.pathname.split("/").slice(2).join("/");
-      if (redirectTo) {
-        window.location.href = "/" + redirectTo;
-      }
-    </script> -->
-  </body>
+  <body></body>
 </html>

@@ -42,7 +42,7 @@
     // <Provider store={store}> لازم يحيط بالروت كومبومنت
     return (
       <Provider store={store}>
-        <BrowserRouter>
+        <BrowserRouter basename="/tawasol-client">
           <AlertProvider template={AlertTemplate} {...options}>
             <Fragment>
               <Alert />
