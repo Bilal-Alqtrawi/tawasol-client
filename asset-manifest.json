@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/tawasol-client/static/css/main.2cc3e796.css",
-    "main.js": "/tawasol-client/static/js/main.b9a75784.js",
+    "main.js": "/tawasol-client/static/js/main.af55baac.js",
     "static/media/landing.jpg": "/tawasol-client/static/media/landing.bdc46aa3abe4832b1f35.jpg",
     "index.html": "/tawasol-client/index.html",
     "main.2cc3e796.css.map": "/tawasol-client/static/css/main.2cc3e796.css.map",
-    "main.b9a75784.js.map": "/tawasol-client/static/js/main.b9a75784.js.map"
+    "main.af55baac.js.map": "/tawasol-client/static/js/main.af55baac.js.map"
   },
   "entrypoints": [
     "static/css/main.2cc3e796.css",
-    "static/js/main.b9a75784.js"
+    "static/js/main.af55baac.js"
   ]
 }
