@@ -98,8 +98,8 @@ small {
   top: 0;
   left: 0;
   background-image: linear-gradient(
-   to bottom,
-  var(--primary-color) 40%,
+    to bottom,
+    var(--primary-color) 40%,
     var(--secondary-color) 60%
   );
   overflow-x: hidden;
@@ -445,9 +445,6 @@ a {
     -o-transition: 0.3s;
   }
   .sidebar > div a {
-    display: none;
-  }
-  .logo-navbar {
     display: none;
   }
   .menu-bar {
