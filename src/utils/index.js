@@ -1,4 +1,5 @@
 import axios from "axios"; // library from it call APIs
+import defaultImg from "../assets/default.png";
 
 export const serverUrl = process.env.REACT_APP_API_URL;
 
@@ -24,9 +25,9 @@ export const setAuthToken = (token) => {
 
 // when store image will store it on this URL:
 export const getProfileImage = (userId) => {
-  if (!userId) {
+  if (!userId || userId === "undefined" || userId == null) {
     console.error("User ID is not defined");
-    return ""; // or return a default image URL
+    return defaultImg; // or return a default image URL
   }
   return `${serverUrl}/images/${userId}`;
 };

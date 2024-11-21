@@ -11,6 +11,12 @@ const PostItem = ({
   post: { _id, text, name, user, likes, comments, date },
   showActions,
 }) => {
+  const toggleLike = (e) => {
+    addLike(_id);
+    if (e.target.onclick) {
+      removeLike(_id);
+    }
+  }  
   return (
     <div className="post-card">
       <div className="row">
@@ -18,7 +24,7 @@ const PostItem = ({
           <img
             className="profile"
             src={getProfileImage(user)}
-            alt="user_image"
+            alt=""
           />
           <p>{name}</p>
         </div>
@@ -34,9 +40,7 @@ const PostItem = ({
               <button
                 type="button"
                 className="btn btn-light"
-                onClick={(e) => {
-                  addLike(_id);
-                }}
+                onClick={toggleLike}
               >
                 <i className="fas fa-thumbs-up"></i>
                 <span>{likes.length > 0 && <span>{likes.length}</span>}</span>

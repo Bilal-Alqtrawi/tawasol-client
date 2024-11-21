@@ -19,12 +19,18 @@ const Navbar = ({ users: { isAuthenticated }, logout }) => {
       </li>
     </ul>
   );
+  const onClick = (e) => {
+    document.querySelector(".sidebar").classList.add("active");
+  }
   return (
     <nav className="navbar bg-navbar">
       <h1>
         <Link className="logo-navbar" to="/">
           TawaSol
         </Link>
+        <button type="button" className="menu-bar" onClick={onClick}>
+            <i class="fas fa-bars"></i>
+        </button>
       </h1>
       <Fragment>
         {

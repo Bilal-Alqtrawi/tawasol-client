@@ -22,10 +22,15 @@ function Sidebar({ users: { user }, getCurrentProfile }) {
       setImage(defaultImg);
     }
   }
-
+  const onClick = (e) => {
+    document.querySelector(".sidebar").classList.remove("active");    
+  }
   return (
     <div>
       <div className="sidebar">
+        <button type="button" className="close" onClick={onClick}>
+          <i className="fas fa-times"></i>
+        </button>
         <div>
           <Link to="/home">
             <img src={image} onError={onError} className="profile" alt="" />

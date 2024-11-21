@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import {
@@ -32,6 +32,7 @@ const ProfileForm = ({
 }) => {
   const [formData, setFormData] = useState(initialState);
   const [displaySocialInputs, toggleSocialInputs] = useState(false);
+  const navigate = useNavigate();
   useEffect(() => {
     if (!profile) {
       getCurrentProfile();
@@ -39,6 +40,18 @@ const ProfileForm = ({
     if (profile && !loading) {
       const profileData = { ...initialState };
       // TODO
+      // Populate fields with existing profile data
+      for (const key in profile) {
+        if (key in profileData) profileData[key] = profile[key];
+      }
+
+      // Map social links if they exist
+      if (profile.social) {
+        for (const key in profile.social) {
+          if (key in profileData) profileData[key] = profile.social[key];
+        }
+      }
+
       setFormData(profileData);
     }
   }, [loading, getCurrentProfile, profile]);
@@ -60,6 +73,10 @@ const ProfileForm = ({
 
   const onSubmit = (e) => {
     e.preventDefault();
+    if (!status) {
+      alert("Please select your professional status.");
+      return "";
+    }
     createProfile(formData, history, profile ? true : false);
   };
 
@@ -139,6 +156,7 @@ const ProfileForm = ({
             name="skills"
             value={skills}
             onChange={onChange}
+            required
           />
         </div>
         <div className="form-group">
@@ -229,7 +247,17 @@ const ProfileForm = ({
 
         <div className="form-group">
           <input className="btn btn-primary" type="submit" value="Submit" />
-          <Link to="/home">Go back</Link>
+          <button
+            type="button"
+            className="btn btn-light"
+            onClick={() => {
+              navigate("/home");
+              window.location.reload(); // Force refresh on navigation
+            }}
+          >
+            Go Back
+          </button>
+          {/* <Link to="/home">Go back</Link> */}
         </div>
       </form>
     </div>
