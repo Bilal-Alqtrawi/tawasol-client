@@ -12,7 +12,9 @@ function Sidebar({ users: { user }, getCurrentProfile }) {
   useEffect(() => {
     getCurrentProfile();
     if (user) {
-      setImage(getProfileImage(user._id));
+      window.localStorage.setItem("image", getProfileImage(user._id));
+      setImage(window.localStorage.getItem("image"));
+      // setImage(getProfileImage(user._id));
     }
   }, [getCurrentProfile, user]);
 
