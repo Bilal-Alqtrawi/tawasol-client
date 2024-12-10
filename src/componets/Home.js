@@ -22,12 +22,13 @@ const Home = ({
 }) => {
   const [image, setImage] = useState("");
   const [errored, setErrored] = useState(false);
+  console.log(profile); // Check if profile.avatar exists
 
   useEffect(() => {
     getCurrentProfile();
     if (user) {
-      window.localStorage.setItem("image", getProfileImage(user._id));
-      setImage(window.localStorage.getItem("image"));
+      const profileImage = getProfileImage(user._id);
+      setImage(profileImage);
       // setImage(getProfileImage(user._id));
     }
   }, [getCurrentProfile, user]);
@@ -53,7 +54,7 @@ const Home = ({
           <div className="home-row">
             <div style={{ textAlign: "center" }} className="home-column">
               <img
-                src={image}
+                src={image || defaultImage}
                 className="profile-picture"
                 alt="profile"
                 onError={onError}
