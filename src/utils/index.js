@@ -1,8 +1,8 @@
 import axios from "axios"; // library from it call APIs
 import defaultImg from "../assets/default.png";
 
-// export const serverUrl = process.env.REACT_APP_API_URL;
-export const serverUrl = "http://localhost:5000";
+export const serverUrl = process.env.REACT_APP_API_URL;
+// export const serverUrl = "http://localhost:5000";
 
 // helper function
 // axios.create // create Api
