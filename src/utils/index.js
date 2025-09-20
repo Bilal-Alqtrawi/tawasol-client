@@ -1,7 +1,8 @@
 import axios from "axios"; // library from it call APIs
 import defaultImg from "../assets/default.png";
 
-export const serverUrl = process.env.REACT_APP_API_URL;
+// export const serverUrl = process.env.REACT_APP_API_URL;
+export const serverUrl = "http://localhost:5000";
 
 // helper function
 // axios.create // create Api
@@ -29,14 +30,15 @@ export const getProfileImage = (userId) => {
     console.error("User ID is not defined");
     return defaultImg; // or return a default image URL
   }
-  return `${serverUrl}/images/${userId}`;
+
+  return;
+  // return `${serverUrl}/images/${userId}`;
 };
 
-// Format Date From DataBase
 // Format Date From DataBase
 export const formatDate = (date) => {
   return new Intl.DateTimeFormat("en", {
     year: "numeric",
-    month: "long",
+    month: "short",
   }).format(new Date(date));
 };

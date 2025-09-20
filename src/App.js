@@ -46,7 +46,7 @@
           <AlertProvider template={AlertTemplate} {...options}>
             <Fragment>
               <Alert />
-              <Navbar />
+              {/* <Navbar /> */}
               <Routes>
                 <Route exact path="/" element={<Landing />} />
                 <Route exact path="/register" element={<Register />} />

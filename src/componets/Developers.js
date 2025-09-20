@@ -1,41 +1,46 @@
 import { connect } from "react-redux";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { getProfiles } from "../redux/modules/profiles";
-import { getProfileImage } from "../utils";
+import { Link, useParams } from "react-router-dom";
+import { getProfileById, getProfiles } from "../redux/modules/profiles";
 import defaultImg from "../assets/default.png";
+import Spinner from "./Spinner";
 
 function Developers({ user, getProfiles, profiles: { profiles, loading } }) {
-  useEffect(() => {
-    getProfiles();
-  }, [getProfiles]);
+  // getProfiles();
+  useEffect(
+    function () {
+      if (profiles.length > 0) return;
+      getProfiles();
+    },
+    [getProfiles, profiles.length]
+  );
 
-  return (
-    <div>
-      {loading ? null : (
-        <div className="home">
-          <div className="row">
-            {profiles
-              .filter((profile) => profile.user._id !== user._id)
-              .map((profile) => {
-                return (
-                  <div className="column" key={profile.user._id}>
-                    <Link to={`/profile/${profile.user._id}`}>
-                      <Developer profile={profile} />
-                    </Link>
-                  </div>
-                );
-              })}
-          </div>
-        </div>
-      )}
+  return loading ? (
+    <Spinner />
+  ) : (
+    <div className="row">
+      {profiles
+        .filter((profile) => profile.user._id !== user._id)
+        .map((profile) => {
+          return (
+            <div className="column" key={profile.user._id}>
+              <Link to={`/profile/${profile.user._id}`}>
+                <Developer profile={profile} />
+              </Link>
+            </div>
+          );
+        })}
     </div>
   );
 }
 
 const Developer = ({ profile }) => {
   const [errored, setErrored] = useState(false);
-  const [image, setImage] = useState(getProfileImage(profile.user._id));
+  const [image, setImage] = useState(profile.image);
+
+  const { id } = useParams();
+
+  console.log(id);
 
   function onError() {
     if (!errored) {
@@ -43,6 +48,14 @@ const Developer = ({ profile }) => {
       setImage(defaultImg);
     }
   }
+
+  // useEffect(
+  //   function () {
+  //     getProfileById(id);
+  //   },
+  //   [id]
+  // );
+
   return (
     <div className="card">
       <img onError={onError} src={image} alt=""></img>

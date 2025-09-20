@@ -4,6 +4,7 @@ import { Link, Navigate } from "react-router-dom";
 import PropTypes from "prop-types"; // what props expected
 import { register } from "../../redux/modules/users";
 import { showAlertMessage } from "../../redux/modules/alerts";
+import Navbar from "../Navbar";
 
 const Register = ({ isAuthenticated, register, showAlertMessage }) => {
   // internal State
@@ -36,63 +37,65 @@ const Register = ({ isAuthenticated, register, showAlertMessage }) => {
   };
   if (isAuthenticated) {
     // window.location.href = `/home`
-    return <Navigate to="/home"/>
+    return <Navigate to="/home" />;
   }
   return (
-    <div className="main register">
-      <p className="form-title" align="center">
-        Sign Up
-      </p>
-      <form className="form1" onSubmit={onSubmit}>
-        <input
-          className="input-text"
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={name}
-          align="center"
-          onChange={onChange}
-        />
-        <input
-          className="input-text"
-          type="text"
-          name="email"
-          placeholder="Email"
-          value={email}
-          align="center"
-          onChange={onChange}
-        />
-        <input
-          className="input-text"
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={password}
-          align="center"
-          onChange={onChange}
-        />
-        <input
-          className="input-text"
-          type="password"
-          placeholder="Confirm Password"
-          name="password2"
-          value={password2}
-          align="center"
-          onChange={onChange}
-        />
-        <input
-          className="btn btn-primary"
-          style={{ marginLeft: "36%" }}
-          type="submit"
-          align="center"
-          value="Register"
-        />
-        <p className="forgot" align="center">
-          Already hava an account?
-          <Link to="/login"> Sign In</Link>
+    <>
+      <Navbar />
+      <div className="main register">
+        <p className="form-title" align="center">
+          Sign Up
         </p>
-      </form>
-    </div>
+        <form className="form1" onSubmit={onSubmit}>
+          <input
+            className="input-text"
+            type="text"
+            name="name"
+            placeholder="Name"
+            value={name}
+            align="center"
+            onChange={onChange}
+          />
+          <input
+            className="input-text"
+            type="text"
+            name="email"
+            placeholder="Email"
+            value={email}
+            align="center"
+            onChange={onChange}
+          />
+          <input
+            className="input-text"
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={password}
+            align="center"
+            onChange={onChange}
+          />
+          <input
+            className="input-text"
+            type="password"
+            placeholder="Confirm Password"
+            name="password2"
+            value={password2}
+            align="center"
+            onChange={onChange}
+          />
+          <input
+            className="btn btn-primary"
+            type="submit"
+            align="center"
+            value="Register"
+          />
+          <p className="forgot" align="center">
+            Already hava an account?
+            <Link to="/login"> Sign In</Link>
+          </p>
+        </form>
+      </div>
+    </>
   );
 };
 

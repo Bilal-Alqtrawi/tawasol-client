@@ -1,5 +1,4 @@
-import React from "react";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { logout } from "../redux/modules/users";
@@ -8,14 +7,16 @@ const Navbar = ({ users: { isAuthenticated }, logout }) => {
   const links = (
     <ul>
       <li>
-        <Link to="/login">Login</Link>
+        <Link to="/login" className="login">
+          Login
+        </Link>
       </li>
     </ul>
   );
   const authLinks = (
     <ul>
       <li>
-        <Link onClick={logout} to="/">
+        <Link onClick={logout} to="/" className="logout">
           Logout
         </Link>
       </li>
@@ -29,7 +30,7 @@ const Navbar = ({ users: { isAuthenticated }, logout }) => {
       <h1>
         {isAuthenticated ? (
           <button type="button" className="menu-bar" onClick={onClick}>
-            <i class="fas fa-bars"></i>
+            <i className="fas fa-bars"></i>
           </button>
         ) : (
           <Link className="logo-navbar" to="/">

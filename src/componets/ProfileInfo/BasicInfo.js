@@ -1,36 +1,32 @@
-import React from "react";
-
 const BasicInfo = ({ profile }) => {
+  if (!profile) {
+    return null;
+  }
+
+  const { bio, location, country, status } = profile;
+
   return (
-    <div>
-      <div className="container">
-        <p>{profile.bio}</p>
-      </div>
-      <div className="container">
-        <p>
-          &#127759; Lives In <b>{profile.location}</b>
-        </p>
-      </div>
-      <div className="container">
-        <p>
-          &#127968; from <b>{profile.country}</b>
-        </p>
-      </div>
-      <div className="container">
-        <p>
-          {profile.skills.map((skill, index) => {
-            return <Skills key={index} skills={skill} />;
-          })}
-        </p>
+    <div className="basic-info-container">
+      {status && <p className="info-status">{status}</p>}
+
+      {bio && <p className="info-bio">{bio}</p>}
+
+      <div className="location-details">
+        {location && (
+          <span className="info-item">
+            <i className="fas fa-map-marker-alt"></i>
+            {location}
+          </span>
+        )}
+        {country && (
+          <span className="info-item">
+            <i className="fas fa-flag"></i>
+            {country}
+          </span>
+        )}
       </div>
     </div>
   );
 };
-const Skills = ({ skills: skill }) => {
-  return (
-    <div>
-      <span>&#10004; {skill}</span>
-    </div>
-  );
-};
+
 export default BasicInfo;

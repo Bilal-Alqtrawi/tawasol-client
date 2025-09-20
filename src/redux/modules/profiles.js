@@ -1,8 +1,10 @@
 import { showAlertMessage } from "./alerts";
-import { api, serverUrl } from "../../utils";
+import { api } from "../../utils";
 
 // Commincate With API
+export const LOADING = "profile/Loading";
 export const GET_PROFILE = "profile/GET_PROFILE";
+export const GET_PROFILE_BY_ID = "profile/GET_PROFILE_BY_ID";
 export const GET_PROFILES = "profile/GET_PROFILES";
 export const UPDATE_PROFILE = "profile/UPDATE_PROFILE";
 export const PROFILE_ERROR = "profile/PROFILE_ERROR";
@@ -12,6 +14,7 @@ export const CLEAR_PROFILE = "profile/CLEAR_PROFILE";
 export const getCurrentProfile = () => async (dispatch) => {
   try {
     const res = await api.get("/profiles/me");
+    console.log(res.data);
     dispatch({
       type: GET_PROFILE,
       payload: res.data,
@@ -27,23 +30,21 @@ export const getCurrentProfile = () => async (dispatch) => {
   }
 };
 // Create or Update  (formData come from Reacr Form to send to server)
+
 export const createProfile =
   (formData, history, edit = false) =>
   async (dispatch) => {
     try {
+      dispatch({ type: LOADING });
       const res = await api.post("/profiles", formData);
-      dispatch({
-        type: UPDATE_PROFILE, // Update Or Create
-        payload: res.data,
-      });
-
+      console.log(res.data);
+      dispatch({ type: UPDATE_PROFILE, payload: res.data });
       dispatch(
         showAlertMessage(
           edit ? "Profile Updated" : "Profile Created",
           "success"
         )
       );
-
       if (!edit) {
         history.push("/home");
       }
@@ -63,28 +64,34 @@ export const createProfile =
       });
     }
   };
+export const uploadProfileImage = (data) => {
+  console.log(data);
+  return async (dispatch) => {
+    try {
+      dispatch({ type: LOADING });
+      const res = await api.post("/profiles/upload", data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      console.log("Upload success:", res.data);
+      // dispatch({ type: UPDATE_PROFILE, payload: res.data });
+      dispatch(showAlertMessage("Profile image updated", "success"));
 
-export const uploadProfileImage = (data) => async (dispatch) => {
-  try {
-    const res = await api.post(`${serverUrl}/api/profiles/upload`, data, {
-      headers: {
-        "Content-Type": "multipart/form-data", // server stander image sent its image
-      },
-    });
-    dispatch({
-      type: UPLOAD_PROFILE_IMAGE,
-      payload: res.data,
-    });
-  } catch (err) {
-    console.log(err);
-  }
+      return res.data;
+    } catch (err) {
+      console.error("Upload failed:", err.response?.data || err.message);
+      dispatch(showAlertMessage("Image upload failed", "error"));
+    }
+  };
 };
 
 export const getProfiles = () => async (dispatch) => {
-  dispatch({ type: CLEAR_PROFILE });
   try {
+    dispatch({
+      type: LOADING,
+    });
     console.log("profiles: ");
     const res = await api.get("/profiles");
+    console.log(res);
     console.log("profiles: " + res.data);
     dispatch({
       type: GET_PROFILES,
@@ -100,11 +107,17 @@ export const getProfiles = () => async (dispatch) => {
 
 export const getProfileById = (userId) => async (dispatch) => {
   try {
-    const res = await api.get(`/profiles/user/${userId}`);
     dispatch({
-      type: GET_PROFILE,
+      type: LOADING,
+    });
+    const res = await api.get(`/profiles/user/${userId}`);
+
+    dispatch({
+      type: GET_PROFILE_BY_ID,
       payload: res.data,
     });
+
+    return res.data;
   } catch (err) {
     dispatch({
       type: PROFILE_ERROR,
@@ -115,6 +128,9 @@ export const getProfileById = (userId) => async (dispatch) => {
 
 export const addExperience = (formData, history) => async (dispatch) => {
   try {
+    dispatch({
+      type: LOADING,
+    });
     // formData From client
     const res = await api.put("/profiles/experience", formData);
     dispatch({
@@ -141,6 +157,9 @@ export const addExperience = (formData, history) => async (dispatch) => {
 
 export const addEducation = (formData, history) => async (dispatch) => {
   try {
+    dispatch({
+      type: LOADING,
+    });
     const res = await api.put("/profiles/education", formData);
     dispatch({
       type: UPDATE_PROFILE,
@@ -163,8 +182,12 @@ export const addEducation = (formData, history) => async (dispatch) => {
     });
   }
 };
+
 export const deleteExperience = (id) => async (dispatch) => {
   try {
+    dispatch({
+      type: LOADING,
+    });
     const res = await api.delete(`/profiles/experience/${id}`);
     dispatch({
       type: UPDATE_PROFILE,
@@ -184,6 +207,9 @@ export const deleteExperience = (id) => async (dispatch) => {
 
 export const deleteEducation = (id) => async (dispatch) => {
   try {
+    dispatch({
+      type: LOADING,
+    });
     const res = await api.delete(`/profiles/education/${id}`);
     dispatch({
       type: UPDATE_PROFILE,
@@ -205,6 +231,9 @@ export const deleteEducation = (id) => async (dispatch) => {
 export const deleteAccount = () => async (dispatch) => {
   if (window.confirm("Are you sure? This can NOT be undone!")) {
     try {
+      dispatch({
+        type: LOADING,
+      });
       await api.delete("/profiles");
 
       dispatch({ type: CLEAR_PROFILE });
@@ -224,46 +253,38 @@ export const deleteAccount = () => async (dispatch) => {
 
 const initialState = {
   profile: null,
+  selectedProfile: null,
   profiles: [],
   loading: true,
   error: {},
   image: null,
 };
-
 export default function reducer(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
+    case LOADING:
+      return { ...state, loading: true };
     case GET_PROFILE:
     case UPDATE_PROFILE:
+      console.log(payload);
       return {
         ...state,
         profile: payload,
+        image: payload.image,
         loading: false,
       };
+    case GET_PROFILE_BY_ID:
+      console.log(payload);
+      return { ...state, selectedProfile: payload, loading: false };
     case GET_PROFILES:
-      return {
-        ...state,
-        profiles: payload,
-        loading: false,
-      };
+      return { ...state, profiles: payload, loading: false };
     case PROFILE_ERROR:
-      return {
-        ...state,
-        error: payload,
-        loading: false,
-        profile: null,
-      };
+      return { ...state, error: payload, loading: false, profile: null };
     case CLEAR_PROFILE:
-      return {
-        ...state,
-        profile: null,
-        repos: [],
-      };
+      return { ...state, profile: null, repos: [] };
     case UPLOAD_PROFILE_IMAGE:
-      return {
-        ...state,
-        image: payload,
-      };
+      console.log(payload);
+      return { ...state, image: payload, loading: false };
     default:
       return state;
   }

@@ -11,6 +11,7 @@ const store = configureStore({
 
 let currentState = store.getState();
 
+/* when dispatch action as like Thunk middleware, this subscript will work */
 store.subscribe(() => {
   let previousState = currentState;
   currentState = store.getState();

@@ -1,20 +1,42 @@
 import { connect } from "react-redux";
 import { deleteComment } from "../../redux/modules/posts";
-import { formatDate, getProfileImage } from "../../utils";
+import { formatDate } from "../../utils";
+import { useEffect, useState } from "react";
+import { getProfileById } from "../../redux/modules/profiles";
+import defaultImg from "../../assets/default.png";
 
 const CommentItem = ({
   postId,
   comment: { _id, user, text, name, date },
   users,
+  getProfileById,
   deleteComment,
 }) => {
+  const [userProfile, setUserProfile] = useState(null);
+
+  useEffect(
+    function () {
+      async function getUserProfile() {
+        try {
+          const res = await getProfileById(user);
+
+          setUserProfile(res);
+        } catch (err) {
+          console.error(err.message);
+        }
+      }
+      getUserProfile();
+    },
+    [getProfileById, user]
+  );
+
   return (
     <div className="post-card">
       <div className="row">
         <div className="column">
           <img
             className="profile"
-            src={getProfileImage(user)}
+            src={userProfile?.image ?? defaultImg}
             alt="user_image"
           />
           <p>{name}</p>
@@ -48,4 +70,6 @@ const mapStateToProps = (state) => ({
   users: state.users,
 });
 
-export default connect(mapStateToProps, { deleteComment })(CommentItem);
+export default connect(mapStateToProps, { deleteComment, getProfileById })(
+  CommentItem
+);

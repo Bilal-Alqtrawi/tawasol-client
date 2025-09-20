@@ -1,9 +1,9 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { deleteAccount } from "../redux/modules/profiles";
 
 const Settings = ({ deleteAccount }) => {
+  const navigate = useNavigate();
   return (
     <div className="home">
       <div className="post-card center">
@@ -24,7 +24,15 @@ const Settings = ({ deleteAccount }) => {
           </p>
         </div>
         <div style={{ marginBottom: 15 }}>
-          <button className="btn btn-danger" onClick={() => deleteAccount()}>
+          <button
+            className="btn btn-danger"
+            onClick={() => {
+              deleteAccount();
+              setTimeout(() => {
+                navigate("/");
+              }, 100);
+            }}
+          >
             Delete Account
           </button>
         </div>

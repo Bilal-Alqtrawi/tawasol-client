@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { addEducation } from "../../redux/modules/profiles";
 
 const AddEducation = ({ addEducation, history }) => {
+  const fromRef = useRef(null);
+  const toRef = useRef(null);
+
   const [formData, setFormData] = useState({
     school: "",
     degree: "",
@@ -22,20 +25,26 @@ const AddEducation = ({ addEducation, history }) => {
       [e.target.name]: e.target.value,
     });
 
+  const handleFocus = (ref) => {
+    if (ref.current && ref.current.showPicker) {
+      ref.current.showPicker();
+    }
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
     addEducation(formData, history);
   };
 
   return (
-    <div
-      className="main"
-      style={{ textAlign: "center", width: 700, padding: 15 }}
-    >
-      <p className="form-title">Add Education</p>
-      <small> * = required field</small>
-      <form className="form1" onSubmit={onSubmit}>
-        <div>
+    <div className="form-page-container add-eduction-form">
+      <div className="form-header">
+        <h1 className="form-title">Add Education</h1>
+        <small> * = required field</small>
+      </div>
+
+      <form className="modern-form" onSubmit={onSubmit}>
+        <div className="form-group">
           <input
             type="text"
             placeholder="* School"
@@ -44,7 +53,8 @@ const AddEducation = ({ addEducation, history }) => {
             onChange={onChange}
           />
         </div>
-        <div>
+
+        <div className="form-group">
           <input
             type="text"
             placeholder="* Degree or Certificate"
@@ -53,7 +63,7 @@ const AddEducation = ({ addEducation, history }) => {
             onChange={onChange}
           />
         </div>
-        <div>
+        <div className="form-group">
           <input
             type="text"
             placeholder="Field of Study"
@@ -62,48 +72,57 @@ const AddEducation = ({ addEducation, history }) => {
             onChange={onChange}
           />
         </div>
-        <div>
-          <h3 style={{ marginLeft: 110, textAlign: "left", marginBottom: 20 }}>
-            From Date
-          </h3>
-          <input type="date" name="from" value={from} onChange={onChange} />
+        <div className="form-section">
+          <div className="form-grid">
+            <div className="form-group">
+              <label htmlFor="fromDate">From Date</label>
+              <input
+                ref={fromRef}
+                type="date"
+                id="fromDate"
+                name="from"
+                value={from}
+                onChange={onChange}
+                onFocus={() => handleFocus(fromRef)}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="toDate">To Date</label>
+              <input
+                ref={toRef}
+                id="toDate"
+                type="date"
+                name="to"
+                value={to}
+                onChange={onChange}
+                disabled={current}
+                onFocus={() => handleFocus(toRef)}
+              />
+            </div>
+            <div className="form-group">
+              <label>
+                <input
+                  type="checkbox"
+                  name="current"
+                  value={current}
+                  checked={current}
+                  onChange={() =>
+                    setFormData({ ...formData, current: !current })
+                  }
+                  style={{ marginRight: 5 }}
+                />
+                <span> Current School</span>
+              </label>
+            </div>
+          </div>
         </div>
-        <div>
-          <label
-            style={{
-              display: "block",
-              marginLeft: 110,
-              textAlign: "left",
-              marginBottom: 20,
-            }}
-          >
-            <input
-              type="checkbox"
-              name="current"
-              value={current}
-              checked={current}
-              onChange={() => setFormData({ ...formData, current: !current })}
-              style={{marginRight: 5}}
-            />
-            Current School
-          </label>
+
+        <div className="form-actions">
+          <input type="submit" className="btn btn-primary" value="Send" />
+          <Link to="/home" className="btn btn-light">
+            Go Back
+          </Link>
         </div>
-        <div>
-          <h3 style={{ marginLeft: 110, textAlign: "left", marginBottom: 20 }}>
-            To Date
-          </h3>
-          <input
-            type="date"
-            name="to"
-            value={to}
-            onChange={onChange}
-            disabled={current}
-          />
-        </div>
-        <input type="submit" className="btn btn-primary" />
-        <Link to="/home" className="btn btn-light">
-          Go Back
-        </Link>
       </form>
     </div>
   );

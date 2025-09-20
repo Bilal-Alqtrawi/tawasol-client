@@ -1,24 +1,30 @@
-import React from "react";
 import { formatDate } from "../../utils";
 
 const Experience = ({ profile, deleteExperience }) => {
+  if (!profile?.experience || profile.experience.length === 0) {
+    return <p className="no-data-message">No experience details added yet.</p>;
+  }
+
   return (
-    <div>
-      {profile.experience.map((e) => (
-        <div key={e._id} className="container">
-          {deleteExperience !== undefined ? (
-            <a href="#!" onClick={() => deleteExperience(e._id)}>
-              <i className="fas fa-trash delete" />
-            </a>
-          ) : null}
-          <p>
-            &#127891; {e.current ? "Works" : "Worked"} as <b>{e.title}</b> at{" "}
-            {e.location}
-          </p>
-          <small>
-            from {formatDate(e.from)} to{" "}
-            {e.current ? "Current" : formatDate(e.to)}
-          </small>
+    <div className="timeline-container">
+      {profile.experience.map((exp) => (
+        <div key={exp._id} className="timeline-item">
+          <div className="timeline-icon">
+            <i className="fas fa-briefcase"></i>
+          </div>
+          <div className="timeline-content">
+            <span className="timeline-date">
+              {formatDate(exp.from)} - {exp.current ? "Present" : formatDate(exp.to)}
+            </span>
+            <h4 className="timeline-title">{exp.title}</h4>
+            <p className="timeline-subtitle">{exp.company}</p>
+            {exp.description && <p className="timeline-description">{exp.description}</p>}
+          </div>
+          {deleteExperience && (
+            <button onClick={() => deleteExperience(exp._id)} className="btn-delete-item" title="Delete">
+              <i className="fas fa-trash" />
+            </button>
+          )}
         </div>
       ))}
     </div>

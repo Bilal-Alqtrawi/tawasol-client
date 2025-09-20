@@ -28,14 +28,13 @@ const AddExperience = ({ addExperience, history }) => {
   };
 
   return (
-    <div
-      className="main"
-      style={{ textAlign: "center", width: 700, padding: 15 }}
-    >
-      <p className="form-title">Add Experience</p>
-      <small> * = required field</small>
-      <form className="form1" onSubmit={onSubmit}>
-        <div>
+    <div className="form-page-container add-eduction-form">
+      <div className="form-header">
+        <h1 className="form-title">Add Experience</h1>
+        <small> * = required field</small>
+      </div>
+      <form className="modern-form" onSubmit={onSubmit}>
+        <div className="form-group">
           <input
             type="text"
             placeholder="* Job Title"
@@ -44,7 +43,7 @@ const AddExperience = ({ addExperience, history }) => {
             onChange={onChange}
           />
         </div>
-        <div>
+        <div className="form-group">
           <input
             type="text"
             placeholder="* Company"
@@ -53,7 +52,7 @@ const AddExperience = ({ addExperience, history }) => {
             onChange={onChange}
           />
         </div>
-        <div>
+        <div className="form-group">
           <input
             type="text"
             placeholder="Location"
@@ -62,43 +61,38 @@ const AddExperience = ({ addExperience, history }) => {
             onChange={onChange}
           />
         </div>
-        <div>
-          <h3 style={{ marginLeft: 110, textAlign: "left", marginBottom: 20 }}>
-            From Date
-          </h3>
-          <input type="date" name="from" value={from} onChange={onChange} />
-        </div>
-        <div>
-          <label
-            style={{
-              display: "block",
-              marginLeft: 110,
-              textAlign: "left",
-              marginBottom: 20,
-            }}
-          >
-            <input
-              type="checkbox"
-              name="current"
-              value={current}
-              checked={current}
-              onChange={() => setFormData({ ...formData, current: !current })}
-              style={{ marginRight: 5 }}
-            />
-            Current Job
-          </label>
-        </div>
-        <div>
-          <h3 style={{ marginLeft: 110, textAlign: "left", marginBottom: 20 }}>
-            To Date
-          </h3>
-          <input
-            type="date"
-            name="to"
-            value={to}
-            onChange={onChange}
-            disabled={current}
-          />
+        <div className="form-section">
+          <div className="form-grid">
+            <div className="form-group">
+              <h3>From Date</h3>
+              <input type="date" name="from" value={from} onChange={onChange} />
+            </div>
+            <div className="form-group">
+              <h3>To Date</h3>
+              <input
+                type="date"
+                name="to"
+                value={to}
+                onChange={onChange}
+                disabled={current}
+              />
+            </div>
+            <div className="form-group">
+              <label>
+                <input
+                  type="checkbox"
+                  name="current"
+                  value={current}
+                  checked={current}
+                  onChange={() =>
+                    setFormData({ ...formData, current: !current })
+                  }
+                  style={{ marginRight: 5 }}
+                />
+                Current Job
+              </label>
+            </div>
+          </div>
         </div>
         <input type="submit" className="btn btn-primary" />
         <Link to="/home" className="btn btn-light">

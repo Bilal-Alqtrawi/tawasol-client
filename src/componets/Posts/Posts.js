@@ -9,16 +9,14 @@ function Posts({ getPosts, posts }) {
   }, [getPosts]);
 
   return (
-    <div className="home">
+    <>
+      <PostForm />
       <div>
-        <PostForm />
-        <div>
-          {posts.map((post) => (
-            <PostItem key={post._id} post={post} />
-          ))}
-        </div>
+        {posts.map((post) => (
+          <PostItem key={post._id} post={post} />
+        ))}
       </div>
-    </div>
+    </>
   );
 }
 

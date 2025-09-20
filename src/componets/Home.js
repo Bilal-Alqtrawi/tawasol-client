@@ -1,131 +1,158 @@
-import React, { useState } from "react";
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { connect } from "react-redux";
 import {
   deleteEducation,
   deleteExperience,
   getCurrentProfile,
 } from "../redux/modules/profiles";
-import { getProfileImage } from "../utils";
 import defaultImage from "../assets/default.png";
 import BasicInfo from "./ProfileInfo/BasicInfo";
 import Education from "./ProfileInfo/Education";
 import Experience from "./ProfileInfo/Experience";
+import Spinner from "./Spinner";
 
 const Home = ({
   getCurrentProfile,
   deleteEducation,
   deleteExperience,
-  profiles: { profile },
-  users: { user },
+  profiles: { profile, loading },
 }) => {
-  const [image, setImage] = useState("");
-  const [errored, setErrored] = useState(false);
-  console.log(profile); // Check if profile.avatar exists
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    console.log(pathname);
+    const el = document.querySelector(".profile-hero");
+    if (el) {
+      el.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [pathname]);
 
   useEffect(() => {
     getCurrentProfile();
-    if (user) {
-      const profileImage = getProfileImage(user._id);
-      setImage(profileImage);
-      // setImage(getProfileImage(user._id));
-    }
-  }, [getCurrentProfile, user]);
+  }, [getCurrentProfile]);
 
-  function onError() {
-    if (!errored) {
-      setErrored(true);
-      setImage(defaultImage);
-    }
+  if (loading && profile === null) {
+    return <Spinner message="Loading your profile..." />;
   }
 
+  if (!loading && profile === null) {
+    return (
+      <div className="empty-state-container">
+        <div className="icon">
+          <i className="fas fa-user-plus empty-state-icon"></i>
+        </div>
+        <h2 className="empty-state-title">Welcome to TawaSol!</h2>
+        <p className="empty-state-text">
+          Create your professional profile to connect with other developers.
+        </p>
+        <Link to="/create-profile" className="btn btn-primary btn-lg">
+          Create Your Profile
+        </Link>
+      </div>
+    );
+  }
+
+  const { user, image, social, skills } = profile;
+
+  console.log(image);
+
   return (
-    <div className="home">
-      {profile === null ? (
-        <div>
-          <p style={{ padding: 10 }}>Please create a profile</p>
-          <Link to="/create-profile" className="btn btn-primary">
-            Create Profile
-          </Link>
+    <div className="profile-page-container">
+      <div className="profile-hero">
+        <div className="hero-background"></div>
+        <img
+          src={image ? image : defaultImage}
+          className="hero-avatar"
+          alt={`${user?.name}'s profile`}
+        />
+        <h1 className="hero-name">{user?.name}</h1>
+        <div className="hero-basic-info">
+          <BasicInfo profile={profile} />
         </div>
-      ) : (
-        <div>
-          <div className="home-row">
-            <div style={{ textAlign: "center" }} className="home-column">
-              <img
-                src={image || defaultImage}
-                className="profile-picture"
-                alt="profile"
-                onError={onError}
-              />
-              <p className="name">{profile.user.name}</p>
-            </div>
-            <div className="home-column">
-              <BasicInfo profile={profile} />
-              <div className="social">
-                {profile.social
-                  ? Object.keys(profile.social)
-                      .filter((media) => profile.social[media] !== "")
-                      .map((media) => {
-                        return (
-                          <a
-                            key={media}
-                            rel="noreferrer"
-                            target="_blank"
-                            href={profile.social[media]}
-                          >
-                            <i className={`fab fa-${media} fa-2x`}></i>
-                          </a>
-                        );
-                      })
-                  : null}
+        <div className="hero-social">
+          {social &&
+            Object.entries(social)
+              .filter(([, url]) => url)
+              .map(([media, url]) => (
+                <a
+                  key={media}
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <i className={`fab fa-${media}`}></i>
+                </a>
+              ))}
+        </div>
+        <Link to="/edit-profile" className="btn-edit-profile">
+          <i className="fas fa-pen"></i> Edit Profile
+        </Link>
+      </div>
+
+      <div className="profile-main-content">
+        <div className="profile-left-column">
+          {skills && skills.length > 0 && (
+            <div className="info-card">
+              <h3 className="card-title">
+                <i className="fas fa-code"></i> Skills
+              </h3>
+              <div className="skills-container">
+                {skills.map((skill, index) => (
+                  <span key={index} className="skill-tag">
+                    {skill}
+                  </span>
+                ))}
               </div>
             </div>
+          )}
+        </div>
+
+        <div className="profile-right-column">
+          <div className="info-card">
+            <div className="card-header-action">
+              <h3>
+                <i className="fas fa-graduation-cap"></i> Education
+              </h3>
+              <Link
+                to="/add-education"
+                className="btn-add-circle"
+                title="Add Education"
+              >
+                <i className="fa fa-plus"></i>
+              </Link>
+            </div>
+            <Education profile={profile} deleteEducation={deleteEducation} />
           </div>
-          <div className="home-row">
-            <div className="home-column">
-              <div className="home-row">
-                <div className="home-column">
-                  <h3>Education</h3>
-                </div>
-                <div className="home-column">
-                  <Link to="/add-education" className="add-button">
-                    <i className="fa fa-plus-circle fa-2x"></i>
-                  </Link>
-                </div>
-              </div>
-              <Education profile={profile} deleteEducation={deleteEducation} />
+
+          <div className="info-card">
+            <div className="card-header-action">
+              <h3>
+                <i className="fas fa-briefcase"></i> Experience
+              </h3>
+              <Link
+                to="/add-experience"
+                className="btn-add-circle"
+                title="Add Experience"
+              >
+                <i className="fa fa-plus"></i>
+              </Link>
             </div>
-            <div className="home-column">
-              <div className="home-row">
-                <div className="home-column">
-                  <h3>Experience</h3>
-                </div>
-                <div className="home-column">
-                  <Link to="/add-experience" className="add-button">
-                    <i className="fa fa-plus-circle fa-2x"></i>
-                  </Link>
-                </div>
-              </div>
-              <Experience
-                profile={profile}
-                deleteExperience={deleteExperience}
-              />
-            </div>
+            <Experience profile={profile} deleteExperience={deleteExperience} />
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    profiles: state.profiles,
-    users: state.users,
-  };
-};
+const mapStateToProps = (state) => ({
+  profiles: state.profiles,
+});
+
 export default connect(mapStateToProps, {
   getCurrentProfile,
   deleteEducation,
