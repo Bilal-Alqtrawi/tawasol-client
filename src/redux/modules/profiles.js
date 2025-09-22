@@ -1,5 +1,6 @@
 import { showAlertMessage } from "./alerts";
 import { api } from "../../utils";
+import { logout } from "./users";
 
 // Commincate With API
 export const LOADING = "profile/Loading";
@@ -239,6 +240,8 @@ export const deleteAccount = () => async (dispatch) => {
       dispatch({ type: CLEAR_PROFILE });
 
       dispatch(showAlertMessage("Your account has been permanently deleted"));
+
+      dispatch(logout());
     } catch (err) {
       dispatch({
         type: PROFILE_ERROR,

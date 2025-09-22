@@ -169,7 +169,7 @@ const ProfileForm = ({
 
       data.append("file", e.target.files[0]);
 
-      uploadProfileImage(data).then((res) => setUserImage(res.image));
+      uploadProfileImage(data).then((res) => setUserImage(res?.image));
       // if (img) {
       //   setUserImage(img);
       // }

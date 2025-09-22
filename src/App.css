@@ -1313,6 +1313,9 @@ input[type="file"] {
   padding-top: 20px;
   border-top: 1px solid #e9ecef;
 }
+.form-page-container .form-actions {
+  border-top: 0;
+}
 
 .form-actions .btn {
   min-width: 120px;
@@ -1332,6 +1335,7 @@ input[type="file"] {
   .form-actions .btn {
     width: 100%;
   }
+
   .modern-form {
     padding: 20px;
   }
@@ -1457,6 +1461,11 @@ input[type="file"] {
 
 .form-actions .btn-primary {
   width: fit-content;
+}
+@media (max-width: 767px) {
+  .form-actions .btn-primary {
+    width: 100%;
+  }
 }
 
 /* Sida Bar Styles */
