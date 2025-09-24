@@ -128,7 +128,7 @@ const ProfileForm = ({
 
       console.log(profileData);
     }
-  }, [loading, getCurrentProfile, profile, user.name]);
+  }, [loading, getCurrentProfile, profile, user?.name]);
 
   const {
     company,
